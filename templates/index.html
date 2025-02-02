@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Widget by Jaime Gabriel A. Domingo</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="weather-widget">
+      <div class="header">
+        <div class="author">Created by Jaime Gabriel A. Domingo</div>
+        <button class="info-button" onclick="openModal()">ℹ️</button>
+      </div>
+      <div class="location">
+        <h2 id="location">New York, NY</h2>
+      </div>
+      <div class="weather-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100px"
+          height="100px"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M5.38846 12.7023C3.98522 12.1237 3 10.7636 3 9.17807C3 7.42863 4.3 5.8125 6.25 5.5C6.86168 4.0617 8.30934 3 9.9978 3C12.1607 3 13.9285 4.65893 14.05 6.75C14.8721 7.10549 15.5169 7.83126 15.8166 8.69914M5.38846 12.7023C4.50928 13.5938 4 14.7867 4 16.0315C4 18.7755 6.28335 21 9.1 21L16.75 21C19.0972 21 21 19.1279 21 16.8185C21 15.1039 19.951 13.5202 18.45 12.875C18.3457 11.0905 17.3135 9.5483 15.8166 8.69914M5.38846 12.7023C6.11557 11.9651 7.0957 11.4339 8.25 11.25C9.04989 9.3802 10.943 8 13.151 8C14.1227 8 15.0333 8.25474 15.8166 8.69914"
+            stroke="#000000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="temperature">
+        <p id="temperature">--°C</p>
+      </div>
+      <div class="condition">
+        <p id="condition">--</p>
+      </div>
+      <div class="additional-info">
+        <p id="humidity">Humidity: --%</p>
+        <p id="wind">Wind: -- m/s</p>
+      </div>
+      <div class="search">
+        <input type="text" id="lat" placeholder="Latitude" />
+        <input type="text" id="lon" placeholder="Longitude" />
+        <button onclick="fetchWeatherFromInput()">Get Weather</button>
+      </div>
+    </div>
+  </body>
+
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2>Product Management Accelerator</h2>
+        <ul class="Description">
+          <p>The Product Manager Accelerator Program is designed to support PM professionals through every stage of their careers.</p>
+          <p>From students looking for entry-level jobs to Directors looking to take on a leadership role, our program has helped over hundreds of students fulfill their career aspirations.</p>
+          <p>Our Product Manager Accelerator community are ambitious and committed.</p>
+          <p>Through our program they have learnt, honed and developed new PM and leadership skills, giving them a strong foundation for their future endeavors.</p>
+        </ul>
+
+  <script>
+    //infobutton
+    function openModal() {
+            document.getElementById('infoModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('infoModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+    function fetchWeatherFromInput() {
+      const lat = document.getElementById("lat").value;
+      const lon = document.getElementById("lon").value;
+      if (lat && lon) {
+        fetchWeather(lat, lon);
+      } else {
+        alert("Please enter both latitude and longitude.");
+      }
+    }
+    async function fetchWeather(lat, lon) {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:5001/weather?lat=${lat}&lon=${lon}`
+        );
+        const data = await response.json();
+
+        if (data.error) {
+          console.error(data.error);
+          return;
+        }
+
+        //Update tHE DOM with weather data
+        document.getElementById("location").textContent = data.name;
+                document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
+                document.getElementById("condition").textContent = data.weather[0].main;
+                document.getElementById("humidity").textContent = `Humidity: ${data.main.humidity}%`;
+                document.getElementById("wind").textContent = `Wind: ${data.wind.speed} m/s`;
+
+                // Handle weather icon
+                
+
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                alert("Error fetching weather data. Please try again.");
+            }
+        }
+
+    // Fetch weather for a default location (e.g., latitude and longitude for New York)
+    document.addEventListener("DOMContentLoaded", () => {
+            const defaultLat = 40.7128;
+            const defaultLon = -74.006;
+            fetchWeather(defaultLat, defaultLon);
+        });
+    </script>
+</body>
+</html>
