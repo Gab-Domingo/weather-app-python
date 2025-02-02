@@ -94,7 +94,7 @@
     async function fetchWeather(lat, lon) {
       try {
         const response = await fetch(
-          `http://127.0.0.1:5001/weather?lat=${lat}&lon=${lon}`
+          `/weather?lat=${lat}&lon=${lon}`
         );
         const data = await response.json();
 
