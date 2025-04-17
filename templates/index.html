@@ -49,6 +49,10 @@
         <input type="text" id="city" placeholder="Enter city name (e.g., London, Tokyo, New York)" />
         <button onclick="fetchWeatherFromInput()">Get Weather</button>
       </div>
+      <div class="saved-locations-link">
+        <a href="/locations">Manage Saved Locations</a>
+        <button id="saveLocationBtn" onclick="saveCurrentLocation()" style="display: none;">Save This Location</button>
+      </div>
     </div>
   </body>
 
@@ -135,16 +139,83 @@
 
     // Function to update the weather display
     function updateWeatherDisplay(data) {
+        // Store the current weather data for saving
+        currentWeatherData = data;
+
         document.getElementById("location").textContent = data.name;
         document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
         document.getElementById("condition").textContent = data.weather[0].main;
         document.getElementById("humidity").textContent = `Humidity: ${data.main.humidity}%`;
         document.getElementById("wind").textContent = `Wind: ${data.wind.speed} m/s`;
+
+        // Update AI description if available
+        if (data.ai_description) {
+            document.getElementById("ai-description").textContent = data.ai_description;
+            document.getElementById("ai-description").parentElement.style.display = "block";
+        } else if (document.getElementById("ai-description")) {
+            document.getElementById("ai-description").parentElement.style.display = "none";
+        }
+
+        // Show the save location button
+        document.getElementById("saveLocationBtn").style.display = "inline-block";
     }
 
-    // Fetch weather for a default location (New York) when the page loads
+    // Save current location
+    let currentWeatherData = null;
+
+    function saveCurrentLocation() {
+        if (!currentWeatherData) {
+            alert('No weather data available to save');
+            return;
+        }
+
+        const locationData = {
+            city_name: currentWeatherData.name,
+            country_code: currentWeatherData.sys?.country || '',
+            latitude: currentWeatherData.coord?.lat,
+            longitude: currentWeatherData.coord?.lon,
+            notes: '',
+            is_favorite: false
+        };
+
+        fetch('/locations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(locationData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error || 'Failed to save location'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(`Location ${data.city_name} saved successfully!`);
+        })
+        .catch(error => {
+            alert(error.message);
+            console.error('Error saving location:', error);
+        });
+    }
+
+    // Check URL parameters for city on page load
+    function checkUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const city = urlParams.get('city');
+
+        if (city) {
+            document.getElementById('city').value = city;
+            fetchWeatherByCity(city);
+        } else {
+            fetchWeatherByCity("New York");
+        }
+    }
+
+    // Fetch weather for a default location or from URL params when the page loads
     document.addEventListener("DOMContentLoaded", () => {
-        fetchWeatherByCity("New York");
+        checkUrlParams();
     });
     </script>
 </body>

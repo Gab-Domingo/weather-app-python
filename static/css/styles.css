@@ -114,3 +114,51 @@ body {
 .search button:hover {
     background-color: #45a049;
 }
+
+.ai-description {
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.ai-description p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+    text-align: left;
+    font-style: italic;
+}
+
+.saved-locations-link {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.saved-locations-link a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.saved-locations-link a:hover {
+    text-decoration: underline;
+}
+
+#saveLocationBtn {
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+#saveLocationBtn:hover {
+    background-color: #F57C00;
+}

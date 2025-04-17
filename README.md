@@ -1,10 +1,11 @@
 # Weather App
 
-A web application built with Flask that displays weather information based on city name. The app provides current weather data through an interactive interface.
+A web application built with Flask that displays weather information based on city name. The app provides current weather data through an interactive interface and includes AI-generated natural language descriptions of weather conditions powered by Google's Gemini AI.
 
 ## Features
 
 - Get real-time weather data by searching for any city name
+- AI-generated natural language descriptions of weather conditions using Google's Gemini AI
 - Clean and responsive user interface
 - Visual representation of weather conditions
 - Support for temperature, humidity, wind speed, and other weather metrics
@@ -15,7 +16,21 @@ Before running the application, make sure you have the following installed:
 - Python 3+
 - Flask
 - requests library
+- python-dotenv
+- google-generativeai
 - Any modern web browser
+
+## API Keys
+
+This application requires the following API keys:
+1. OpenWeatherMap API key (for weather data)
+2. Google Gemini API key (for AI-generated weather descriptions)
+
+Create a `.env` file in the root directory with the following content:
+```
+WEATHER_API_KEY="your_openweathermap_api_key"
+GEMINI_API_KEY="your_gemini_api_key"
+```
 
 ## Installation
 
@@ -44,11 +59,14 @@ python main.py
 ```
 weather-app/
 ├── main.py              # Flask application file
+├── ai_helper.py         # Gemini AI integration
+├── .env                 # Environment variables (not tracked by git)
 ├── static/
 │   ├── css/           # Stylesheet files
-│      └── style.css
+│      └── styles.css
 ├── templates/          # HTML templates
 │   └── index.html
+├── requirements.txt     # Python dependencies
 └── README.md
 ```
 
