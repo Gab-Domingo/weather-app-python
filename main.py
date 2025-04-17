@@ -13,16 +13,22 @@ def get_route():
 
 @app.route('/weather', methods=['GET'])
 def get_weather():
+    city = request.args.get("city")
     lat = request.args.get("lat")
     lon = request.args.get("lon")
 
     params = {"appid": WEATHER_API_KEY, "units":"metric"}
-    
-    if lat and lon:
+
+    if city:
+        # Search by city name
+        params["q"] = city
+    elif lat and lon:
+        # Search by coordinates
         params["lat"] = lat
         params["lon"] = lon
     else:
-        return jsonify({'error': "Provide a city name or coordinates"}),400
+        return jsonify({'error': "Provide a city name or coordinates"}), 400
+
     print(f"Fetching weather from: {WEATHER_API_URL}?{params}")
     response = requests.get(WEATHER_API_URL, params = params)
 
@@ -32,5 +38,4 @@ def get_weather():
 
 
 if __name__ == "__main__":
-    #app.run(debug=True, host="0.0.0.0", port=5001)
-    pass
+    app.run(debug=True, host="0.0.0.0", port=5001)

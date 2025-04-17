@@ -46,8 +46,7 @@
         <p id="wind">Wind: -- m/s</p>
       </div>
       <div class="search">
-        <input type="text" id="lat" placeholder="Latitude" />
-        <input type="text" id="lon" placeholder="Longitude" />
+        <input type="text" id="city" placeholder="Enter city name (e.g., London, Tokyo, New York)" />
         <button onclick="fetchWeatherFromInput()">Get Weather</button>
       </div>
     </div>
@@ -83,14 +82,34 @@
         }
 
     function fetchWeatherFromInput() {
-      const lat = document.getElementById("lat").value;
-      const lon = document.getElementById("lon").value;
-      if (lat && lon) {
-        fetchWeather(lat, lon);
+      const city = document.getElementById("city").value;
+      if (city) {
+        fetchWeatherByCity(city);
       } else {
-        alert("Please enter both latitude and longitude.");
+        alert("Please enter a city name.");
       }
     }
+
+    async function fetchWeatherByCity(city) {
+      try {
+        const response = await fetch(
+          `/weather?city=${encodeURIComponent(city)}`
+        );
+        const data = await response.json();
+
+        if (data.error) {
+          console.error(data.error);
+          alert(data.error);
+          return;
+        }
+
+        updateWeatherDisplay(data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        alert("Error fetching weather data. Please try again.");
+      }
+    }
+
     async function fetchWeather(lat, lon) {
       try {
         const response = await fetch(
@@ -103,15 +122,10 @@
           return;
         }
 
-        //Update tHE DOM with weather data
-        document.getElementById("location").textContent = data.name;
-                document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
-                document.getElementById("condition").textContent = data.weather[0].main;
-                document.getElementById("humidity").textContent = `Humidity: ${data.main.humidity}%`;
-                document.getElementById("wind").textContent = `Wind: ${data.wind.speed} m/s`;
+        updateWeatherDisplay(data);
 
                 // Handle weather icon
-                
+
 
             } catch (error) {
                 console.error("Error fetching weather data:", error);
@@ -119,12 +133,19 @@
             }
         }
 
-    // Fetch weather for a default location (e.g., latitude and longitude for New York)
+    // Function to update the weather display
+    function updateWeatherDisplay(data) {
+        document.getElementById("location").textContent = data.name;
+        document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
+        document.getElementById("condition").textContent = data.weather[0].main;
+        document.getElementById("humidity").textContent = `Humidity: ${data.main.humidity}%`;
+        document.getElementById("wind").textContent = `Wind: ${data.wind.speed} m/s`;
+    }
+
+    // Fetch weather for a default location (New York) when the page loads
     document.addEventListener("DOMContentLoaded", () => {
-            const defaultLat = 40.7128;
-            const defaultLon = -74.006;
-            fetchWeather(defaultLat, defaultLon);
-        });
+        fetchWeatherByCity("New York");
+    });
     </script>
 </body>
 </html>

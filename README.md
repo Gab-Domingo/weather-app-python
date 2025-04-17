@@ -1,10 +1,10 @@
 # Weather App
 
-A web application built with Flask that displays weather information based on latitude and longitude coordinates. The app provides current weather data through an interactive interface.
+A web application built with Flask that displays weather information based on city name. The app provides current weather data through an interactive interface.
 
 ## Features
 
-- Get real-time weather data using geographical coordinates
+- Get real-time weather data by searching for any city name
 - Clean and responsive user interface
 - Visual representation of weather conditions
 - Support for temperature, humidity, wind speed, and other weather metrics
@@ -44,7 +44,7 @@ python main.py
 ```
 weather-app/
 ├── main.py              # Flask application file
-├── static/            
+├── static/
 │   ├── css/           # Stylesheet files
 │      └── style.css
 ├── templates/          # HTML templates
@@ -55,7 +55,7 @@ weather-app/
 ## Usage
 
 1. Open the application in your web browser
-2. Enter the latitude and longitude coordinates in the input fields
+2. Enter a city name (e.g., "London", "Tokyo", "New York") in the input field
 3. Click the "Get Weather" button to fetch weather information
 4. View the weather details displayed on the screen
 
@@ -66,6 +66,8 @@ The application uses the following endpoint:
 ```
 GET /weather
 Parameters:
+- city: City name (string)
+  OR
 - lat: Latitude (float)
 - lon: Longitude (float)
 
