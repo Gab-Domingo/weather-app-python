@@ -101,6 +101,29 @@ Response: JSON object containing weather information
 5. Create a new Pull Request
 
 
+## Security Features
+
+This application includes several security measures to protect against common vulnerabilities:
+
+- **Input Validation**: All user inputs are validated and sanitized to prevent injection attacks
+- **Rate Limiting**: API endpoints are protected with rate limiting to prevent DoS attacks
+- **Secure File Operations**: Data is saved using atomic operations to prevent data corruption
+- **Security Headers**: HTTP security headers are added to all responses to protect against various attacks
+- **Error Handling**: Generic error messages in production to prevent information disclosure
+- **API Key Protection**: API keys are stored in environment variables, not in the code
+
+## Security Best Practices
+
+When deploying this application, consider the following security best practices:
+
+1. **Use HTTPS**: Always deploy with HTTPS in production
+2. **Regular Updates**: Keep all dependencies updated to patch security vulnerabilities
+3. **Implement Authentication**: Add user authentication for a multi-user environment
+4. **Database Security**: If using a database, ensure it's properly secured
+5. **Logging**: Implement comprehensive logging for security events
+6. **Backups**: Regularly backup your data
+7. **Security Audits**: Periodically review the code for security issues
+
 ## Acknowledgments
 
 - Weather data provided by Open Weather app
